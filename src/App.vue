@@ -10,6 +10,7 @@
 import Advantages from './components/Advantages.vue'
 import AddAdvantage from './components/AddAdvantage.vue'
 import Header from './components/Layout/Header.vue'
+import axios from 'axios'
 export default {
   name: 'App',
   components: {
@@ -20,26 +21,30 @@ export default {
   data(){
     return{
       advantages: [
-        {
-          id: 1,
-          title: 'Flexibilidade',
-          completed: false
-        },
-        {
-          id: 2,
-          title: 'Fácil entendimento',
-          completed: false
-        }
       ]
     }
   },
   methods: {
     deleteAdvantage(id){
-      this.advantages = this.advantages.filter(a => a.id !== id)
+      axios.delete(`https://jsonplaceholder.typicode.com/todos/${id}`)
+      .then(this.advantages = this.advantages.filter(a => a.id !== id))
+      .catch(err => console.log(err))
+      
     },
     addAdvantage(advantage){
-      this.advantages = [...this.advantages, advantage]
+      const { title, completed } = advantage;
+      axios.post('https://jsonplaceholder.typicode.com/todos', {
+        title,
+        completed
+      }).then(data => this.advantages = [...this.advantages, data.data])
+      .catch(err => console.log(err))
+      
     }
+  },
+  created(){
+    axios.get('https://jsonplaceholder.typicode.com/todos?_limit=4')
+    .then(data => this.advantages = data.data)
+    .catch(err => console.log(err));
   }
 }
 </script>

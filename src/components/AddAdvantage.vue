@@ -8,7 +8,6 @@
 </template>
 
 <script>
-import { v4 as uuidv4 } from 'uuid';
 
 export default {
     name: "AddAdvantage",
@@ -21,7 +20,6 @@ export default {
         addAdvantage(e) {
             e.preventDefault();
             const newAdvantage = {
-                id: uuidv4,
                 title: this.title,
                 completed: false
             }
